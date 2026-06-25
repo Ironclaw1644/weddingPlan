@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import Faq from '../components/Faq.astro';
+import Cta from '../components/Cta.astro';
+import { getLocation } from '../data/locations';
+import { services } from '../data/services';
+import { faqs } from '../data/faqs';
+import { site } from '../data/site';
+import ceremony from '../assets/hero-lakeside-ceremony.jpg';
+
+const loc = getLocation('wedding-coordinator-loganville-ga')!;
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url + '/' },
+    { '@type': 'ListItem', position: 2, name: `Wedding Coordinator in ${loc.city}`, item: `${site.url}/${loc.slug}` },
+  ],
+};
+
+const localFaqs = faqs.filter((f) => f.q !== 'Do you only plan weddings?');
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: localFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<BaseLayout title={loc.title} description={loc.metaDescription} schemas={[breadcrumb, faqSchema]}>
+  <section class="page-hero section--alt">
+    <div class="container" data-reveal>
+      <p class="eyebrow">{loc.city}, GA &middot; Wedding &amp; Event Coordinator</p>
+      <h1>{loc.h1}</h1>
+      <div class="intro">
+        {loc.intro.map((p) => <p set:html={p} />)}
+      </div>
+      <div class="btnrow">
+        <a href="/contact" class="btn">Book a free consultation</a>
+        <a href="/services" class="btn btn--ghost">See pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container split">
+      <figure class="split__media" data-reveal>
+        <Image src={ceremony} alt={`A wedding coordinated by Forrester Fields near ${loc.city}, GA`} widths={[560, 860]} sizes="(max-width: 880px) 100vw, 50vw" />
+      </figure>
+      <div class="split__text" data-reveal>
+        <p class="eyebrow">Local &amp; on-site</p>
+        <h2>Your hometown coordinator</h2>
+        <p>{loc.localNote}</p>
+        <p class="muted-note">Remember: Forrester Fields is a <strong>planner, not a venue</strong>. Already booked a venue in {loc.nearby.join(', ')}? Perfect — I&rsquo;ll coordinate your day right there.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Services in {loc.city}</p>
+        <h2>Coordination for every kind of day</h2>
+        <p class="lede">From day-of coordination to full planning — transparent pricing, owner-led.</p>
+      </div>
+      <div class="cards">
+        {services.map((s) => <ServiceCard service={s} href={`/services#${s.slug}`} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container container--narrow">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Good to know</p>
+        <h2>{loc.city} wedding coordination FAQs</h2>
+      </div>
+      <div data-reveal><Faq items={localFaqs} /></div>
+    </div>
+  </section>
+
+  <Cta heading={`Planning a wedding in ${loc.city}?`} text="Tell me your date and venue — I&rsquo;d love to help your day run beautifully." />
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .page-hero .intro { max-width: 60ch; margin-bottom: 1.8rem; }
+  .page-hero .intro :global(p) { font-size: 1.1rem; color: var(--muted); }
+  .btnrow { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .split__media { margin: 0; }
+  .split__media :global(img) { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); aspect-ratio: 4 / 3; object-fit: cover; }
+  .muted-note { background: var(--bg-deep); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; font-size: 0.96rem; color: var(--muted); border-radius: var(--radius); }
+  .muted-note strong { color: var(--ink); }
+  .section-head { max-width: 640px; margin: 0 auto clamp(2.2rem, 5vw, 3rem); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }
+  @media (max-width: 880px) { .split { grid-template-columns: 1fr; } }
+</style>

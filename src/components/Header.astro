@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import { nav, site } from '../data/site';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a href="/" class="brand" aria-label={`${site.name} — home`}>
+      <Image src={logo} alt={`${site.name} logo`} widths={[112, 168]} sizes="56px" loading="eager" />
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden />
+    <label for="nav-toggle" class="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="nav" aria-label="Primary">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+      <a href="/contact" class="btn nav-cta">Let&rsquo;s Chat</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(1.2) blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 76px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .brand :global(img) { height: 50px; width: auto; }
+  .brand__word {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    letter-spacing: 0.02em;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .nav ul {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav a {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    padding-bottom: 3px;
+  }
+  .nav ul a::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 1.5px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+  .nav ul a:hover::after,
+  .nav ul a[aria-current='page']::after { width: 100%; }
+  .nav-cta { padding: 0.7rem 1.4rem; font-size: 0.72rem; }
+
+  .nav-toggle, .burger { display: none; }
+  .burger { cursor: pointer; flex-direction: column; gap: 5px; padding: 8px; }
+  .burger span { width: 26px; height: 2px; background: var(--ink); transition: 0.3s; }
+
+  @media (max-width: 860px) {
+    .burger { display: flex; }
+    .nav {
+      position: absolute;
+      top: 76px; left: 0; right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 1.5rem var(--gutter) 2rem;
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-130%);
+      transition: transform 0.35s ease;
+      visibility: hidden;
+    }
+    .nav ul { flex-direction: column; gap: 1.1rem; }
+    .nav-cta { align-self: flex-start; }
+    .nav-toggle:checked ~ .nav { transform: translateY(0); visibility: visible; }
+    .nav-toggle:checked ~ .burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle:checked ~ .burger span:nth-child(2) { opacity: 0; }
+    .nav-toggle:checked ~ .burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  }
+</style>

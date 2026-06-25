@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Faq from '../../components/Faq.astro';
+import Cta from '../../components/Cta.astro';
+import { services } from '../../data/services';
+import { faqs } from '../../data/faqs';
+import { site } from '../../data/site';
+
+const title = 'Wedding Planning & Coordination Services | GA';
+const description =
+  "Compare Forrester Fields' wedding & event coordination services in Walton County, GA: full planning, month-of, day-of, reception & hourly. See transparent pricing.";
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: site.url + '/services' },
+  ],
+};
+
+const serviceSchemas = services.map((s) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: s.name,
+  serviceType: 'Wedding & event planning',
+  description: s.description,
+  provider: { '@id': site.url + '/#business' },
+  areaServed: site.areaServed.map((name) => ({ '@type': 'AdministrativeArea', name })),
+  offers: {
+    '@type': 'Offer',
+    priceCurrency: 'USD',
+    price: s.priceValue,
+    ...(s.priceUnit === 'hour'
+      ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: s.priceValue, priceCurrency: 'USD', unitText: 'HUR' } }
+      : {}),
+  },
+}));
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<BaseLayout title={title} description={description} schemas={[breadcrumb, faqSchema, ...serviceSchemas]}>
+  <section class="page-hero section--alt">
+    <div class="container text-center" data-reveal>
+      <p class="eyebrow eyebrow--center">Aiming to Please!</p>
+      <h1>Our wedding &amp; event planning and coordination services</h1>
+      <p class="lede">Honest, transparent pricing — choose the level of support that fits your day and your budget. Every package is delivered at the venue of your choice.</p>
+    </div>
+  </section>
+
+  <!-- WHICH SERVICE HELPER -->
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Which service do I need?</p>
+        <h2>From a guiding hand to the whole journey</h2>
+      </div>
+      <div class="helper" data-reveal>
+        <div class="helper__step"><span>You&rsquo;ve planned it all</span><a href="#day-of-wedding-coordination">Day-of &rarr;</a></div>
+        <div class="helper__arrow" aria-hidden="true">&rarr;</div>
+        <div class="helper__step"><span>Need the final weeks handled</span><a href="#month-of-coordination">Month-of &rarr;</a></div>
+        <div class="helper__arrow" aria-hidden="true">&rarr;</div>
+        <div class="helper__step"><span>Want a partner start to finish</span><a href="#full-wedding-planning">Full planning &rarr;</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE DETAIL LIST -->
+  <section class="section section--alt">
+    <div class="container services-list">
+      {services.map((s, i) => (
+        <article class="srv" id={s.slug} data-reveal>
+          <div class="srv__price">
+            <span class="num">{i + 1}</span>
+            <div>
+              <span class="amount">{s.price}</span>
+              {s.priceNote && <span class="note">{s.priceNote}</span>}
+            </div>
+          </div>
+          <div class="srv__body">
+            <h2>{s.name}</h2>
+            <p>{s.description}</p>
+            <p class="bestfor"><strong>Best for:</strong> {s.bestFor}</p>
+            <a href="/contact" class="btn btn--ghost">Inquire about this</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container container--narrow">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Good to know</p>
+        <h2>Questions, answered</h2>
+      </div>
+      <div data-reveal><Faq items={faqs} /></div>
+    </div>
+  </section>
+
+  <Cta heading="Not sure which package fits?" text="Tell me about your day and I&rsquo;ll point you to the right level of support — no pressure." buttonLabel="Get my recommendation" />
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .section-head { max-width: 660px; margin: 0 auto clamp(2.2rem, 5vw, 3rem); }
+  .helper {
+    display: flex; align-items: stretch; justify-content: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .helper__step {
+    background: var(--bg-deep); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 1.4rem 1.6rem; text-align: center; flex: 1 1 220px; max-width: 280px;
+    display: grid; gap: 0.8rem; align-content: center;
+  }
+  .helper__step span { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); }
+  .helper__step a { font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.74rem; text-decoration: none; color: var(--accent-deep); }
+  .helper__arrow { display: flex; align-items: center; color: var(--accent); font-size: 1.5rem; }
+
+  .services-list { display: grid; gap: 1.4rem; }
+  .srv {
+    display: grid; grid-template-columns: 220px 1fr; gap: 2rem;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 2.2rem;
+    scroll-margin-top: 100px;
+  }
+  .srv__price { display: flex; gap: 1rem; align-items: flex-start; border-right: 1px solid var(--line); padding-right: 1.5rem; }
+  .srv__price .num { font-family: var(--serif); font-size: 1.1rem; color: var(--accent); border: 1px solid var(--accent); width: 2rem; height: 2rem; display: grid; place-items: center; border-radius: 50%; flex: none; }
+  .amount { display: block; font-family: var(--serif); font-size: 1.9rem; color: var(--accent-deep); line-height: 1.1; }
+  .note { display: block; font-size: 0.82rem; color: var(--muted); margin-top: 0.3rem; }
+  .srv__body h2 { font-size: 1.5rem; }
+  .bestfor { color: var(--muted); font-size: 0.96rem; }
+  .bestfor strong { color: var(--ink); }
+  @media (max-width: 760px) {
+    .srv { grid-template-columns: 1fr; gap: 1.2rem; }
+    .srv__price { border-right: none; border-bottom: 1px solid var(--line); padding-right: 0; padding-bottom: 1.2rem; }
+    .helper__arrow { transform: rotate(90deg); }
+  }
+</style>

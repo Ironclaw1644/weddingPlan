@@ -1,0 +1,191 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import Faq from '../components/Faq.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { services } from '../data/services';
+import { faqs } from '../data/faqs';
+import { site } from '../data/site';
+import dusk from '../assets/lakeside-dusk.png';
+import ceremony from '../assets/hero-lakeside-ceremony.jpg';
+import couple from '../assets/owner-couple-beach.jpg';
+
+const title = 'Wedding Planner & Coordinator in Loganville, GA';
+const description =
+  'Forrester Fields is a wedding planner & coordinator in Loganville, GA, serving Walton County & east-metro Atlanta. Day-of from $400. Book a free consultation.';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const offerCatalog = {
+  '@context': 'https://schema.org',
+  '@type': 'OfferCatalog',
+  name: 'Wedding & Event Planning Services',
+  itemListElement: services.map((s) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'Service', name: s.name, description: s.summary },
+    priceCurrency: 'USD',
+    price: s.priceValue,
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} schemas={[faqSchema, offerCatalog]}>
+  <!-- HERO -->
+  <section class="hero">
+    <Image src={dusk} alt="An evening lakeside wedding setting glowing with string lights" class="hero__bg" widths={[900, 1440, 1920]} sizes="100vw" loading="eager" fetchpriority="high" />
+    <div class="hero__scrim"></div>
+    <div class="container hero__inner">
+      <p class="eyebrow" data-reveal style="color:#e7e0cd">Loganville, GA &middot; Wedding &amp; Event Planning</p>
+      <h1 data-reveal>Event Planning Services for Unforgettable Events</h1>
+      <p class="hero__tag" data-reveal>Creating unforgettable memories for your perfect wedding or special event while keeping the budget in check.</p>
+      <div class="hero__cta" data-reveal>
+        <a href="/contact" class="btn btn--light">Let&rsquo;s Chat!</a>
+        <a href="/services" class="btn btn--ghost btn--on-dark">View Services &amp; Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="section section--paper">
+    <div class="container split">
+      <div class="split__text" data-reveal>
+        <p class="eyebrow">Special moments deserve special attention</p>
+        <h2>Your amazing day, planned from beginning to end</h2>
+        <p class="lede">Let Forrester Fields take the stress out of wedding planning and help you create unforgettable events, so you can truly enjoy the celebration! Click below to share your vision and let&rsquo;s get in touch!</p>
+        <p class="muted-note">Forrester Fields is a wedding &amp; event <strong>planning and coordination service — not a venue</strong>. We bring your celebration to life at the venue of your choice, across Walton County and the east-metro Atlanta area.</p>
+        <a href="/contact" class="btn">Tell us about your special day</a>
+      </div>
+      <figure class="split__media" data-reveal>
+        <Image src={ceremony} alt="An outdoor lakeside wedding ceremony coordinated by Forrester Fields" widths={[600, 900]} sizes="(max-width: 880px) 100vw, 50vw" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section--alt" id="services">
+    <div class="container">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Aiming to Please!</p>
+        <h2>Wedding Planner Services</h2>
+        <p class="lede">Menu &amp; price list — with honest, transparent pricing so you can plan with confidence.</p>
+      </div>
+      <div class="cards">
+        {services.map((s) => <ServiceCard service={s} href={`/services#${s.slug}`} />)}
+      </div>
+      <div class="text-center" data-reveal>
+        <a href="/services" class="btn btn--ghost">View all services &amp; pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT PREVIEW -->
+  <section class="section section--paper">
+    <div class="container split split--reverse">
+      <figure class="split__media" data-reveal>
+        <Image src={couple} alt="The owner of Forrester Fields with her husband" widths={[520, 800]} sizes="(max-width: 880px) 100vw, 45vw" />
+      </figure>
+      <div class="split__text" data-reveal>
+        <p class="eyebrow">About Me, Your Wedding Planner!</p>
+        <h2>I was made for this</h2>
+        <p>I am blessed to get to do what I love with the support of a wonderful husband of 32 years. We have attended, been a part of and hosted many celebrations and weddings over the years.</p>
+        <p>It&rsquo;s a dream come true to get to share my ideas and love for weddings and parties with others.</p>
+        <a href="/about" class="btn btn--ghost">More about me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--alt">
+    <div class="container container--narrow">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Good to know</p>
+        <h2>Questions, answered</h2>
+      </div>
+      <div data-reveal><Faq items={faqs.slice(0, 5)} /></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section section--paper" id="contact">
+    <div class="container container--narrow text-center" data-reveal>
+      <p class="eyebrow eyebrow--center">Let&rsquo;s Get Started!</p>
+      <h2>Together, we can bring your vision to life</h2>
+      <p class="lede">Email me or fill out the form below regarding your wedding planning or special event and I&rsquo;ll get back to you as soon as possible.</p>
+    </div>
+    <div class="container container--narrow form-wrap" data-reveal>
+      <ContactForm />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* hero */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(560px, 88vh, 820px);
+    display: flex;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
+  }
+  .hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+  .hero__scrim {
+    position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(20,18,14,0.45) 0%, rgba(20,18,14,0.35) 40%, rgba(20,18,14,0.66) 100%);
+  }
+  .hero__inner { max-width: 760px; }
+  .hero h1 { color: #fff; margin-bottom: 0.5rem; text-shadow: 0 2px 30px rgba(0,0,0,0.35); }
+  .hero__tag { font-size: clamp(1.1rem, 2vw, 1.4rem); color: #f2ecdd; max-width: 38ch; margin-bottom: 2rem; }
+  .hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn--on-dark { color: #fff; border-color: rgba(255,255,255,0.8); }
+  .btn--on-dark:hover { background: #fff; color: var(--ink); border-color: #fff; }
+
+  /* split layout */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .split__media { margin: 0; }
+  .split__media :global(img) {
+    width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);
+    aspect-ratio: 4 / 3; object-fit: cover;
+  }
+  .split--reverse .split__media :global(img) { aspect-ratio: 4 / 5; }
+  .muted-note {
+    background: var(--bg-deep);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.2rem;
+    font-size: 0.96rem;
+    color: var(--muted);
+    border-radius: var(--radius);
+  }
+  .muted-note strong { color: var(--ink); }
+
+  .section-head { max-width: 640px; margin: 0 auto clamp(2.5rem, 5vw, 3.5rem); }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.4rem;
+    margin-bottom: 3rem;
+  }
+  .form-wrap {
+    margin-top: 2.5rem;
+    background: var(--bg-deep);
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+  }
+
+  @media (max-width: 880px) {
+    .split { grid-template-columns: 1fr; }
+    .split--reverse .split__media { order: -1; }
+  }
+</style>

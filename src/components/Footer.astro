@@ -1,0 +1,107 @@
+---
+import { site, nav } from '../data/site';
+const year = 2026;
+---
+
+<footer class="site-footer">
+  <div class="container foot-grid">
+    <div class="foot-brand">
+      <p class="wordmark">Forrester Fields</p>
+      <p class="tag">Wedding &amp; Event Planning &amp; Coordination<br />Loganville, Georgia</p>
+      <p class="not-venue">A planning &amp; coordination service — not a venue. We bring your day to life at the venue of your choice.</p>
+    </div>
+
+    <nav class="foot-col" aria-label="Footer">
+      <h2>Explore</h2>
+      <ul>
+        {nav.filter((n) => n.href !== '/').map((n) => (
+          <li><a href={n.href}>{n.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="foot-col">
+      <h2>Areas Served</h2>
+      <ul>
+        <li><a href="/wedding-coordinator-loganville-ga">Loganville, GA</a></li>
+        <li>Monroe &amp; Walton County</li>
+        <li>Snellville &middot; Grayson</li>
+        <li>Conyers &middot; Covington</li>
+        <li>East-metro Atlanta</li>
+      </ul>
+    </div>
+
+    <div class="foot-col">
+      <h2>Connect</h2>
+      <ul>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      </ul>
+      <div class="socials">
+        <a href={site.social.facebook} aria-label="Facebook" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H17V3.6c-.3 0-1.3-.1-2.45-.1-2.42 0-4.05 1.48-4.05 4.2v2.2H7.8V13h2.7v8h3z"/></svg>
+        </a>
+        <a href={site.social.instagram} aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container foot-bottom">
+    <p>&copy; {year} Forrester Fields — Wedding &amp; Event Planning. All Rights Reserved.</p>
+    <p class="credit">Loganville &middot; Walton County &middot; Metro Atlanta</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: #d9d4c5;
+    padding-top: clamp(3rem, 7vw, 5rem);
+    margin-top: 0;
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+  }
+  .wordmark {
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    color: #fff;
+    margin: 0 0 0.6rem;
+  }
+  .tag { color: var(--accent); font-size: 0.9rem; letter-spacing: 0.04em; margin: 0 0 1.2rem; }
+  .not-venue { font-size: 0.9rem; color: #b3ad9d; max-width: 30ch; }
+  .foot-col h2 {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 1.1rem;
+  }
+  .foot-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  .foot-col a { color: #d9d4c5; text-decoration: none; font-size: 0.95rem; }
+  .foot-col a:hover { color: var(--accent); }
+  .socials { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
+  .socials a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 50%; color: #d9d4c5;
+  }
+  .socials a:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+  .foot-bottom {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-block: 1.5rem;
+    font-size: 0.82rem; color: #9b9587;
+  }
+  .foot-bottom p { margin: 0; }
+  @media (max-width: 760px) {
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .foot-brand { grid-column: 1 / -1; }
+  }
+</style>
