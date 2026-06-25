@@ -2,13 +2,16 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ServiceCard from '../components/ServiceCard.astro';
+import Gallery from '../components/Gallery.astro';
+import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { services } from '../data/services';
 import { faqs } from '../data/faqs';
+import { galleryImages } from '../data/gallery';
 import { site } from '../data/site';
+import hero from '../assets/hero-lakeside-ceremony.jpg';
 import dusk from '../assets/lakeside-dusk.png';
-import ceremony from '../assets/hero-lakeside-ceremony.jpg';
 import couple from '../assets/owner-couple-beach.jpg';
 
 const title = 'Wedding Planner & Coordinator in Loganville, GA';
@@ -18,11 +21,7 @@ const description =
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 };
 
 const offerCatalog = {
@@ -36,12 +35,14 @@ const offerCatalog = {
     price: s.priceValue,
   })),
 };
+
+const homeGallery = galleryImages.slice(0, 9);
 ---
 
 <BaseLayout title={title} description={description} schemas={[faqSchema, offerCatalog]}>
   <!-- HERO -->
   <section class="hero">
-    <Image src={dusk} alt="An evening lakeside wedding setting glowing with string lights" class="hero__bg" widths={[900, 1440, 1920]} sizes="100vw" loading="eager" fetchpriority="high" />
+    <Image src={hero} alt="An outdoor lakeside wedding ceremony coordinated by Forrester Fields" class="hero__bg" widths={[724, 1200, 1600]} sizes="100vw" loading="eager" fetchpriority="high" />
     <div class="hero__scrim"></div>
     <div class="container hero__inner">
       <p class="eyebrow" data-reveal style="color:#e7e0cd">Loganville, GA &middot; Wedding &amp; Event Planning</p>
@@ -54,19 +55,44 @@ const offerCatalog = {
     </div>
   </section>
 
-  <!-- INTRO -->
+  <!-- OUR VISION -->
   <section class="section section--paper">
     <div class="container split">
-      <div class="split__text" data-reveal>
-        <p class="eyebrow">Special moments deserve special attention</p>
-        <h2>Your amazing day, planned from beginning to end</h2>
-        <p class="lede">Let Forrester Fields take the stress out of wedding planning and help you create unforgettable events, so you can truly enjoy the celebration! Click below to share your vision and let&rsquo;s get in touch!</p>
-        <p class="muted-note">Forrester Fields is a wedding &amp; event <strong>planning and coordination service — not a venue</strong>. We bring your celebration to life at the venue of your choice, across Walton County and the east-metro Atlanta area.</p>
-        <a href="/contact" class="btn">Tell us about your special day</a>
-      </div>
       <figure class="split__media" data-reveal>
-        <Image src={ceremony} alt="An outdoor lakeside wedding ceremony coordinated by Forrester Fields" widths={[600, 900]} sizes="(max-width: 880px) 100vw, 50vw" />
+        <Image src={dusk} alt="An evening lakeside wedding setting glowing with string lights" widths={[600, 900]} sizes="(max-width: 880px) 100vw, 50vw" />
       </figure>
+      <div class="split__text" data-reveal>
+        <p class="eyebrow">Our Vision</p>
+        <h2>A beautiful day, no matter what</h2>
+        <p>At Forrester Fields, we believe that every wedding should be a unique and unforgettable event. We have experience navigating the unpredictability of weather and unforeseen circumstances to provide a beautiful day no matter what.</p>
+        <p>We welcome new ideas for ceremonies, receptions, and details that fit the client&rsquo;s needs and personality. Through a variety of in-person meetings, online communication and multiple site visits to your venue we will make your visions a reality. Let&rsquo;s set up a time to chat and see if we are a fit for each other.</p>
+        <p class="muted-note">Forrester Fields is a wedding &amp; event <strong>planning and coordination service — not a venue</strong>. We come to <em>you</em> and the venue you love, across Walton County and the east-metro Atlanta area.</p>
+        <a href={`mailto:${site.email}`} class="email-link">Email us at {site.email}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Special moments deserve special attention</p>
+        <h2>Your amazing day, planned from beginning to end</h2>
+      </div>
+      <Gallery images={homeGallery} />
+      <div class="text-center" data-reveal style="margin-top:2.5rem">
+        <a href="/portfolio" class="btn btn--ghost">View full portfolio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVITE / CTA -->
+  <section class="section section--paper">
+    <div class="container container--narrow text-center" data-reveal>
+      <p class="eyebrow eyebrow--center">Tell us more about your special day!</p>
+      <h2>Let&rsquo;s take the stress out of it</h2>
+      <p class="lede">Let Forrester Fields take the stress out of wedding planning and help you create unforgettable events, so you can truly enjoy the celebration! Click below to share your vision and let&rsquo;s get in touch!</p>
+      <a href="/contact" class="btn">Let&rsquo;s Chat!</a>
     </div>
   </section>
 
@@ -87,8 +113,19 @@ const offerCatalog = {
     </div>
   </section>
 
-  <!-- ABOUT PREVIEW -->
+  <!-- TESTIMONIALS -->
   <section class="section section--paper">
+    <div class="container">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">Kind words</p>
+        <h2>Couples &amp; families love working with us</h2>
+      </div>
+      <Testimonials />
+    </div>
+  </section>
+
+  <!-- ABOUT PREVIEW -->
+  <section class="section section--alt">
     <div class="container split split--reverse">
       <figure class="split__media" data-reveal>
         <Image src={couple} alt="The owner of Forrester Fields with her husband" widths={[520, 800]} sizes="(max-width: 880px) 100vw, 45vw" />
@@ -104,7 +141,7 @@ const offerCatalog = {
   </section>
 
   <!-- FAQ -->
-  <section class="section section--alt">
+  <section class="section section--paper">
     <div class="container container--narrow">
       <div class="section-head text-center" data-reveal>
         <p class="eyebrow eyebrow--center">Good to know</p>
@@ -115,7 +152,7 @@ const offerCatalog = {
   </section>
 
   <!-- CONTACT -->
-  <section class="section section--paper" id="contact">
+  <section class="section section--alt" id="contact">
     <div class="container container--narrow text-center" data-reveal>
       <p class="eyebrow eyebrow--center">Let&rsquo;s Get Started!</p>
       <h2>Together, we can bring your vision to life</h2>
@@ -141,11 +178,10 @@ const offerCatalog = {
   .hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
   .hero__scrim {
     position: absolute; inset: 0; z-index: -1;
-    background:
-      linear-gradient(180deg, rgba(20,18,14,0.45) 0%, rgba(20,18,14,0.35) 40%, rgba(20,18,14,0.66) 100%);
+    background: linear-gradient(180deg, rgba(20,18,14,0.42) 0%, rgba(20,18,14,0.32) 40%, rgba(20,18,14,0.66) 100%);
   }
   .hero__inner { max-width: 760px; }
-  .hero h1 { color: #fff; margin-bottom: 0.5rem; text-shadow: 0 2px 30px rgba(0,0,0,0.35); }
+  .hero h1 { color: #fff; margin-bottom: 0.5rem; text-shadow: 0 2px 30px rgba(0,0,0,0.4); }
   .hero__tag { font-size: clamp(1.1rem, 2vw, 1.4rem); color: #f2ecdd; max-width: 38ch; margin-bottom: 2rem; }
   .hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
   .btn--on-dark { color: #fff; border-color: rgba(255,255,255,0.8); }
@@ -154,35 +190,15 @@ const offerCatalog = {
   /* split layout */
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
   .split__media { margin: 0; }
-  .split__media :global(img) {
-    width: 100%; border-radius: var(--radius); box-shadow: var(--shadow);
-    aspect-ratio: 4 / 3; object-fit: cover;
-  }
+  .split__media :global(img) { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); aspect-ratio: 4 / 3; object-fit: cover; }
   .split--reverse .split__media :global(img) { aspect-ratio: 4 / 5; }
-  .muted-note {
-    background: var(--bg-deep);
-    border-left: 3px solid var(--accent);
-    padding: 1rem 1.2rem;
-    font-size: 0.96rem;
-    color: var(--muted);
-    border-radius: var(--radius);
-  }
+  .email-link { display: inline-block; margin-top: 0.5rem; font-weight: 700; }
+  .muted-note { background: var(--bg-deep); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; font-size: 0.96rem; color: var(--muted); border-radius: var(--radius); }
   .muted-note strong { color: var(--ink); }
 
-  .section-head { max-width: 640px; margin: 0 auto clamp(2.5rem, 5vw, 3.5rem); }
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.4rem;
-    margin-bottom: 3rem;
-  }
-  .form-wrap {
-    margin-top: 2.5rem;
-    background: var(--bg-deep);
-    padding: clamp(1.5rem, 4vw, 2.75rem);
-    border-radius: var(--radius);
-    border: 1px solid var(--line);
-  }
+  .section-head { max-width: 660px; margin: 0 auto clamp(2.5rem, 5vw, 3.5rem); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; margin-bottom: 3rem; }
+  .form-wrap { margin-top: 2.5rem; background: var(--paper); padding: clamp(1.5rem, 4vw, 2.75rem); border-radius: var(--radius); border: 1px solid var(--line); }
 
   @media (max-width: 880px) {
     .split { grid-template-columns: 1fr; }

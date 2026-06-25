@@ -39,6 +39,10 @@ const breadcrumb = {
         <h2>I was made for this</h2>
         <p>I am blessed to get to do what I love with the support of a wonderful husband of 32 years. We have attended, been a part of and hosted many celebrations and weddings over the years.</p>
         <p>It&rsquo;s a dream come true to get to share my ideas and love for weddings and parties with others. I was made for this!</p>
+        <blockquote class="verse">
+          &ldquo;Do not forget to show hospitality to strangers, for by so doing some people have shown hospitality to angels without knowing it.&rdquo;
+          <cite>Hebrews 13:2</cite>
+        </blockquote>
         <p class="muted-note">Forrester Fields is a wedding &amp; event <strong>planning and coordination service — not a venue</strong>. I come to <em>you</em> and the venue you love, anywhere across Walton County and the east-metro Atlanta area.</p>
       </div>
     </div>
@@ -95,6 +99,16 @@ const breadcrumb = {
   .split--reverse .split__media :global(img) { aspect-ratio: 4 / 3; }
   .muted-note { background: var(--bg-deep); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; font-size: 0.96rem; color: var(--muted); border-radius: var(--radius); }
   .muted-note strong { color: var(--ink); }
+  .verse {
+    margin: 1.5rem 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink);
+    padding-left: 1.2rem;
+    border-left: 2px solid var(--accent);
+  }
+  .verse cite { display: block; margin-top: 0.6rem; font-size: 0.8rem; font-style: normal; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-deep); }
   .section-head { max-width: 640px; margin: 0 auto clamp(2.5rem, 5vw, 3.5rem); }
   .values { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }
   .value { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 2rem 1.8rem; }
