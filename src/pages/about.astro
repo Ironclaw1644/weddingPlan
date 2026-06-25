@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Cta from '../components/Cta.astro';
+import { site } from '../data/site';
+import couple from '../assets/owner-couple-beach.jpg';
+import ceremony from '../assets/hero-lakeside-ceremony.jpg';
+
+const title = 'About Forrester Fields | Loganville Wedding Planner';
+const description =
+  'Meet the owner behind Forrester Fields — an owner-led wedding & event coordinator in Loganville, GA. Personal, hands-on planning across Walton County & metro Atlanta.';
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'About', item: site.url + '/about' },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} schemas={[breadcrumb]}>
+  <section class="page-hero section--alt">
+    <div class="container text-center" data-reveal>
+      <p class="eyebrow eyebrow--center">About Me, Your Wedding Planner!</p>
+      <h1>Meet the planner behind Forrester Fields</h1>
+      <div class="flourish" aria-hidden="true">&#10086;</div>
+      <p class="lede">Owner-led, hands-on, and genuinely in love with celebrations — here to make your day feel effortless.</p>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container split">
+      <figure class="split__media" data-reveal>
+        <Image src={couple} alt="The owner of Forrester Fields with her husband of 32 years" widths={[520, 800]} sizes="(max-width: 880px) 100vw, 45vw" />
+      </figure>
+      <div class="split__text" data-reveal>
+        <h2>I was made for this</h2>
+        <p>I am blessed to get to do what I love with the support of a wonderful husband of 32 years. We have attended, been a part of and hosted many celebrations and weddings over the years.</p>
+        <p>It&rsquo;s a dream come true to get to share my ideas and love for weddings and parties with others. I was made for this!</p>
+        <blockquote class="verse">
+          &ldquo;Do not forget to show hospitality to strangers, for by so doing some people have shown hospitality to angels without knowing it.&rdquo;
+          <cite>Hebrews 13:2</cite>
+        </blockquote>
+        <p class="muted-note">Forrester Fields is a wedding &amp; event <strong>planning and coordination service — not a venue</strong>. I come to <em>you</em> and the venue you love, anywhere across Walton County and the east-metro Atlanta area.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head text-center" data-reveal>
+        <p class="eyebrow eyebrow--center">How I work</p>
+        <h2>Personal, present, and budget-minded</h2>
+      </div>
+      <div class="values">
+        <div class="value" data-reveal>
+          <h3>You work with me</h3>
+          <p>No faceless team or hand-offs. From our first chat to your grand exit, you have a seasoned planner who knows every detail of your day.</p>
+        </div>
+        <div class="value" data-reveal>
+          <h3>Your vision, your budget</h3>
+          <p>I help you create unforgettable events while keeping the budget in check — honest, transparent pricing and choices that protect what matters most to you.</p>
+        </div>
+        <div class="value" data-reveal>
+          <h3>At your venue</h3>
+          <p>Backyard, barn, ballroom, or lakeside — I coordinate beautifully wherever you choose to say &ldquo;I do,&rdquo; with multiple site visits along the way.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container split split--reverse">
+      <figure class="split__media" data-reveal>
+        <Image src={ceremony} alt="A lakeside wedding ceremony coordinated by Forrester Fields" widths={[560, 860]} sizes="(max-width: 880px) 100vw, 50vw" />
+      </figure>
+      <div class="split__text" data-reveal>
+        <h2>Let&rsquo;s create something unforgettable</h2>
+        <p>Whether you need a full year of planning or just a steady hand on the big day, I&rsquo;d love to hear about your celebration.</p>
+        <div class="btnrow">
+          <a href="/services" class="btn btn--ghost">See services &amp; pricing</a>
+          <a href="/contact" class="btn">Let&rsquo;s chat</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Cta heading="Tell me about your special day" text="Share your date, your venue, and your vision — I&rsquo;ll be in touch personally." />
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .page-hero .flourish { font-size: 1.1rem; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .split__media { margin: 0; }
+  .split__media :global(img) { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); aspect-ratio: 4 / 5; object-fit: cover; }
+  .split--reverse .split__media :global(img) { aspect-ratio: 4 / 3; }
+  .muted-note { background: var(--bg-deep); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; font-size: 0.96rem; color: var(--muted); border-radius: var(--radius); }
+  .muted-note strong { color: var(--ink); }
+  .verse {
+    margin: 1.5rem 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink);
+    padding-left: 1.2rem;
+    border-left: 2px solid var(--accent);
+  }
+  .verse cite { display: block; margin-top: 0.6rem; font-size: 0.8rem; font-style: normal; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-deep); }
+  .section-head { max-width: 640px; margin: 0 auto clamp(2.5rem, 5vw, 3.5rem); }
+  .values { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }
+  .value { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 2rem 1.8rem; }
+  .value h3 { color: var(--accent-deep); }
+  .btnrow { display: flex; gap: 1rem; flex-wrap: wrap; }
+  @media (max-width: 880px) { .split { grid-template-columns: 1fr; } .split--reverse .split__media { order: -1; } }
+</style>

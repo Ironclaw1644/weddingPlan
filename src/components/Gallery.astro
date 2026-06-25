@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import type { GalleryImage } from '../data/gallery';
+
+interface Props { images: GalleryImage[]; }
+const { images } = Astro.props;
+---
+
+<div class="gallery">
+  {images.map((img) => (
+    <figure class="g-item" data-reveal>
+      <Image src={img.src} alt={img.alt} widths={[400, 700, 1000]} sizes="(max-width: 640px) 90vw, (max-width: 1000px) 45vw, 30vw" />
+    </figure>
+  ))}
+</div>
+
+<style>
+  .gallery {
+    columns: 3 280px;
+    column-gap: 1rem;
+  }
+  .g-item {
+    margin: 0 0 1rem;
+    break-inside: avoid;
+    overflow: hidden;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+  }
+  .g-item :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  .g-item:hover :global(img) { transform: scale(1.04); }
+  @media (max-width: 520px) { .gallery { columns: 1; } }
+</style>

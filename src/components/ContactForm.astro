@@ -1,0 +1,142 @@
+---
+import { site } from '../data/site';
+import { services } from '../data/services';
+
+// Web3Forms access key (PUBLIC — safe to expose; it is not a secret).
+// Set PUBLIC_WEB3FORMS_ACCESS_KEY in Vercel/.env. See LAUNCH.md for the 2-minute setup.
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY ?? '';
+const configured = accessKey.length > 10;
+---
+
+<form
+  id="inquiry-form"
+  class="form"
+  action="https://api.web3forms.com/submit"
+  method="POST"
+  data-configured={configured ? 'true' : 'false'}
+>
+  <input type="hidden" name="access_key" value={accessKey} />
+  <input type="hidden" name="subject" value="New inquiry from forresterfields.com" />
+  <input type="hidden" name="from_name" value="Forrester Fields Website" />
+  <!-- honeypot -->
+  <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+
+  <div class="row">
+    <label>
+      <span>Your name <em>*</em></span>
+      <input type="text" name="name" required autocomplete="name" />
+    </label>
+    <label>
+      <span>Email <em>*</em></span>
+      <input type="email" name="email" required autocomplete="email" />
+    </label>
+  </div>
+
+  <div class="row">
+    <label>
+      <span>Event date</span>
+      <input type="date" name="event_date" />
+    </label>
+    <label>
+      <span>Venue / location</span>
+      <input type="text" name="venue" placeholder="If you have one in mind" />
+    </label>
+  </div>
+
+  <div class="row">
+    <label>
+      <span>Service you're interested in</span>
+      <select name="service">
+        <option value="">Not sure yet</option>
+        {services.map((s) => <option value={s.name}>{s.name} — {s.price}{s.priceNote ? ` (${s.priceNote})` : ''}</option>)}
+      </select>
+    </label>
+    <label>
+      <span>Approx. guest count</span>
+      <input type="number" name="guest_count" min="1" inputmode="numeric" />
+    </label>
+  </div>
+
+  <label>
+    <span>Tell me about your day <em>*</em></span>
+    <textarea name="message" rows="5" required placeholder="Your vision, your date, anything you'd like me to know…"></textarea>
+  </label>
+
+  <div class="actions">
+    <button type="submit" class="btn">Send my inquiry</button>
+    <p class="alt">Prefer email? <a href={`mailto:${site.email}`}>{site.email}</a></p>
+  </div>
+
+  <p class="form-status" role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .form { display: grid; gap: 1.1rem; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  label { display: grid; gap: 0.4rem; }
+  label > span {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  label em { color: var(--accent-deep); font-style: normal; }
+  input, select, textarea {
+    font-family: var(--sans);
+    font-size: 1rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.8rem 0.9rem;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(165,160,93,0.18);
+  }
+  textarea { resize: vertical; }
+  .hp { position: absolute !important; left: -9999px; }
+  .actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .alt { margin: 0; font-size: 0.92rem; color: var(--muted); }
+  .form-status { margin: 0.3rem 0 0; font-weight: 700; }
+  .form-status.ok { color: var(--accent-deep); }
+  .form-status.err { color: #a23b3b; }
+  @media (max-width: 620px) { .row { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const form = document.getElementById('inquiry-form') as HTMLFormElement | null;
+  if (form) {
+    const status = form.querySelector('.form-status') as HTMLElement;
+    const configured = form.dataset.configured === 'true';
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!configured) {
+        status.textContent =
+          'The form isn’t connected yet — please email forresterfields25@gmail.com and we’ll reply right away.';
+        status.className = 'form-status err';
+        return;
+      }
+      status.textContent = 'Sending…';
+      status.className = 'form-status';
+      try {
+        const data = new FormData(form);
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        const json = await res.json();
+        if (json.success) {
+          form.reset();
+          status.textContent = 'Thank you! Your inquiry is on its way — I’ll be in touch soon. 💍';
+          status.className = 'form-status ok';
+        } else {
+          throw new Error(json.message || 'failed');
+        }
+      } catch {
+        status.textContent =
+          'Something went wrong. Please email forresterfields25@gmail.com and I’ll respond personally.';
+        status.className = 'form-status err';
+      }
+    });
+  }
+</script>

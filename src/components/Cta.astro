@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+import dusk from '../assets/lakeside-dusk.png';
+
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  text?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
+}
+const {
+  eyebrow = 'Let’s get started',
+  heading,
+  text,
+  buttonLabel = 'Tell us about your day',
+  buttonHref = '/contact',
+} = Astro.props;
+---
+
+<section class="cta-band">
+  <Image src={dusk} alt="" aria-hidden="true" class="cta-bg" widths={[900, 1440]} sizes="100vw" />
+  <div class="cta-overlay"></div>
+  <div class="container cta-inner" data-reveal>
+    <p class="eyebrow eyebrow--center" style="color:#e7e0cd">{eyebrow}</p>
+    <h2>{heading}</h2>
+    {text && <p class="cta-text">{text}</p>}
+    <a href={buttonHref} class="btn btn--light">{buttonLabel}</a>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    position: relative;
+    isolation: isolate;
+    padding-block: clamp(4rem, 11vw, 8rem);
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+  }
+  .cta-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+  .cta-overlay {
+    position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(28,26,20,0.62), rgba(28,26,20,0.72));
+  }
+  .cta-inner { max-width: 720px; }
+  .cta-band h2 { color: #fff; font-size: clamp(2rem, 4.5vw, 3.1rem); }
+  .cta-text { color: #ece6d8; font-size: 1.1rem; margin-bottom: 2rem; }
+  .cta-band .btn { margin-top: 0.5rem; }
+</style>

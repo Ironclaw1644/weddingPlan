@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Gallery from '../components/Gallery.astro';
+import Cta from '../components/Cta.astro';
+import { galleryImages } from '../data/gallery';
+import { site } from '../data/site';
+
+const title = 'Wedding Coordination Portfolio | Forrester Fields';
+const description =
+  "Browse Forrester Fields' wedding & event coordination work across venues in Walton County & metro Atlanta. Real days, beautifully run. Book yours.";
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Portfolio', item: site.url + '/portfolio' },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} schemas={[breadcrumb]}>
+  <section class="page-hero section--alt">
+    <div class="container text-center" data-reveal>
+      <p class="eyebrow eyebrow--center">Our work</p>
+      <h1>A coordination portfolio</h1>
+      <p class="lede">Forrester Fields isn&rsquo;t a venue — these are real weddings and events we&rsquo;ve helped bring to life at venues across Walton County and metro Atlanta.</p>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <Gallery images={galleryImages} />
+      <p class="more text-center" data-reveal>More real weddings &amp; events are on the way. Follow along on
+        <a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a>.</p>
+    </div>
+  </section>
+
+  <Cta heading="Picture your day, beautifully run" text="Let&rsquo;s talk about your wedding or event and how I can help it unfold without a hitch." />
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .more { margin-top: 2.5rem; color: var(--muted); }
+</style>

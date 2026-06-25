@@ -1,0 +1,58 @@
+---
+import { testimonials } from '../data/testimonials';
+import { site } from '../data/site';
+---
+
+<div class="t-grid">
+  {testimonials.map((t) => (
+    <figure class="t-card" data-reveal>
+      <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+      <blockquote>{t.quote}</blockquote>
+      <figcaption>
+        <span class="t-name">{t.name}</span>
+        <span class="t-meta">Recommends &middot; {t.date}</span>
+      </figcaption>
+    </figure>
+  ))}
+</div>
+<p class="t-link" data-reveal>
+  <a href={site.social.facebook} target="_blank" rel="noopener">Read more reviews on Facebook &rarr;</a>
+</p>
+
+<style>
+  .t-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.4rem;
+  }
+  .t-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 2rem 1.8rem 1.8rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .quote-mark {
+    font-family: var(--serif);
+    font-size: 3.5rem;
+    line-height: 0.6;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  blockquote {
+    margin: 0 0 1.4rem;
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--ink);
+    flex: 1;
+  }
+  figcaption { display: flex; flex-direction: column; gap: 0.2rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  .t-name { font-weight: 700; font-size: 0.95rem; }
+  .t-meta { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--accent-deep); text-transform: uppercase; }
+  .t-link { text-align: center; margin-top: 2rem; }
+  .t-link a { font-weight: 700; letter-spacing: 0.04em; }
+</style>
