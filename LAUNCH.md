@@ -16,6 +16,8 @@ The form is the way couples reach you, so wire it up before launch.
 
 *Until the key is set, the form politely tells visitors to email you instead — so you never miss a lead.*
 
+> **Important:** the live production site builds from the **`main`** branch on Vercel, so set `PUBLIC_WEB3FORMS_ACCESS_KEY` in the Vercel project's Environment Variables (all environments). If it's only set locally, the published site's form will be disabled — and it must be present *before/at* the time you merge the launch PR so production ships with a working form.
+
 ---
 
 ## 2. GitHub + Vercel auto-deploy **[you]**
